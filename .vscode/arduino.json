@@ -1,3 +1,5 @@
 {
-    "board": "arduino:avr:uno"
+    "board": "arduino:avr:uno",
+    "port": "COM3",
+    "sketch": "teste_keypad\\teste_keypad.ino"
 }
