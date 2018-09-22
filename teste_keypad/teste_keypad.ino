@@ -15,18 +15,25 @@ byte pinoscolunas[colunas] = {5,4,3,2}; //pinos utilizados nas colunas
  
 //inicializando o teclado
 Keypad teclado = Keypad( makeKeymap(matrizteclado), pinoslinhas, pinoscolunas, linhas, colunas );
- 
+teclado.setHoldTime(10000);
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Pressione uma tecla");
 }
  
 void loop() {
-  char apertatecla = teclado.getKey(); // verifica se alguma tecla foi pressionada
+  char tecla = teclado.getKey(); // verifica se alguma tecla foi pressionada
+
+  if(teclado.getState() == HOLD){
+    if(tecla == 'A'){
+      Serial.print("HOLD THE LINE");
+    }
+  }
  
-  if (apertatecla) {
+  if (tecla) {
     Serial.print("Tecla Pressionada: ");
-    Serial.println(apertatecla);
+    Serial.println(tecla);
  
  
  

@@ -8,26 +8,30 @@
 #include <Keypad.h>
  
 // Porta do pino de sinal do DS18B20
-#define ONE_WIRE_BUS 13
+const byte tempSensorPin 13
 
-const byte linhas = 4; //4 linhas
-const byte colunas = 4; //4 colunas
+// Porta do pino de sinal do Relay
+const byte relayPin 11
  
 //teclado matricial
+const byte linhas = 4; //4 linhas
+const byte colunas = 4; //4 colunas
+
 const char matrizteclado[linhas][colunas] = {
   {'1', '2', '3', 'A'},
   {'4', '5', '6', 'B'},
   {'7', '8', '9', 'C'},
   {'*', '0', '#', 'D'}
 };
-byte pinoslinhas[linhas] = {9,8,7,6}; //pinos utilizados nas linhas
-byte pinoscolunas[colunas] = {5,4,3,2}; //pinos utilizados nas colunas
+const byte pinoslinhas[linhas] = {9,8,7,6}; //pinos utilizados nas linhas
+const byte pinoscolunas[colunas] = {5,4,3,2}; //pinos utilizados nas colunas
  
 //inicializando o teclado
 Keypad teclado = Keypad( makeKeymap(matrizteclado), pinoslinhas, pinoscolunas, linhas, colunas );
- 
+teclado.setHoldTime(8000); 
+
 // Define uma instancia do oneWire para comunicacao com o sensor
-OneWire oneWire(ONE_WIRE_BUS);
+OneWire oneWire(tempSensorPin);
  
 // Armazena temperaturas minima e maxima
 float tempMin = 999;
