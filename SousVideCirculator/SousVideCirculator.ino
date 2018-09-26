@@ -1,6 +1,3 @@
-// Programa : Sensor de temperatura DS18B20
-// Autor : FILIPEFLOP
- 
 #include <OneWire.h>
 #include <Wire.h>
 #include <DallasTemperature.h>
@@ -13,7 +10,7 @@ const byte tempSensorPin 13
 // Porta do pino de sinal do Relay
 const byte relayPin 11
  
-//teclado matricial
+// Teclado matricial
 const byte linhas = 4; //4 linhas
 const byte colunas = 4; //4 colunas
 
@@ -28,14 +25,12 @@ const byte pinoscolunas[colunas] = {5,4,3,2}; //pinos utilizados nas colunas
  
 //inicializando o teclado
 Keypad teclado = Keypad( makeKeymap(matrizteclado), pinoslinhas, pinoscolunas, linhas, colunas );
-teclado.setHoldTime(8000); 
 
 // Define uma instancia do oneWire para comunicacao com o sensor
 OneWire oneWire(tempSensorPin);
  
-// Armazena temperaturas minima e maxima
-float tempMin = 999;
-float tempMax = 0;
+// Armazena temperatura de cozimento
+float cookTemp = 0;
  
 DallasTemperature sensors(&oneWire);
 DeviceAddress sensor1;
@@ -75,42 +70,22 @@ void mostra_endereco_sensor(DeviceAddress deviceAddress)
  
 void loop()
 {
+  char tecla = teclado.getKey(); // verifica se alguma tecla foi pressionada
+
+  if((teclado.getState() == HOLD) && (tecla == 'A')){
+    Serial.print("Setar Temperatura");
+    // chama função de setCookTemp
+  }
+
   // Le a informacao do sensor
   sensors.requestTemperatures();
-  float tempC = sensors.getTempC(sensor1);
+  float tempAtual = sensors.getTempC(sensor1);
   // Atualiza temperaturas minima e maxima
-  if (tempC < tempMin)
+  if (tempAtual < cookTemp)
   {
-    tempMin = tempC;
+    //ligar o relay
+    // while talvez?
   }
-  if (tempC > tempMax)
-  {
-    tempMax = tempC;
-  }
-  // Mostra dados no serial monitor
-  Serial.print("Temp C: ");
-  Serial.print(tempC);
-  Serial.print(" Min : ");
-  Serial.print(tempMin);
-  Serial.print(" Max : ");
-  Serial.println(tempMax);
    
-  // Mostra dados no LCD  
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Temp.:       ");
-  //Simbolo grau
-  lcd.write(223);
-  lcd.print("C");
-  lcd.setCursor(7,0);
-  lcd.print(tempC);
-  lcd.setCursor(0,1);
-  lcd.print("L: ");
-  lcd.setCursor(3,1);
-  lcd.print(tempMin,1);
-  lcd.setCursor(8,1);
-  lcd.print("H: ");
-  lcd.setCursor(11,1);
-  lcd.print(tempMax,1);
   delay(3000);
 }
