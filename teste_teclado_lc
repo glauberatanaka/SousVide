@@ -19,9 +19,13 @@ char matriz_teclas[qtdLinhas][qtdColunas] = {
 };
  
 //INICIALIZAÇÃO DO TECLADO
-Keypad meuteclado = Keypad( makeKeymap(matriz_teclas), PinosqtdLinhas, PinosqtdColunas, qtdLinhas, qtdColunas); 
+Keypad keypad = Keypad( makeKeymap(matriz_teclas), PinosqtdLinhas, PinosqtdColunas, qtdLinhas, qtdColunas); 
  
  
+char entryStr[2];
+int i=0;
+int cookTemp;
+
 
 void setup()
 { 
@@ -31,24 +35,40 @@ void setup()
   lcd.setCursor(0,0);
   
   
-  lcd.print("Aperte uma tecla..."); //IMPRIME O TEXTO NO MONITOR SERIAL
+  lcd.print("Set Temperatura"); //IMPRIME O TEXTO NO MONITOR SERIAL
   lcd.println(); //QUEBRA UMA LINHA NO MONITOR SERIAL
 }
 
 void loop()
 {
-  
-  
-  
-  char tecla_pressionada = meuteclado.getKey(); //VERIFICA SE ALGUMA DAS TECLAS FOI PRESSIONADA
-  
-  if (tecla_pressionada){ //SE ALGUMA TECLA FOR PRESSIONADA, FAZ
-    lcd.clear();
-    lcd.setCursor(0,2);
-    lcd.print("Tecla: "); //IMPRIME O TEXTO NO MONITOR SERIAL
-   	lcd.println(tecla_pressionada); //IMPRIME NO MONITOR SERIAL A TECLA PRESSIONADA  
-    
-  }
-    
-}
+  char key = keypad.getKey();
 
+if (key){
+  	if (key != '#'){
+    	if(key =='*'){
+    		lcd.clear();
+      		entryStr[0]= '0';
+      		entryStr[1]= '0';
+      
+      	
+    }
+    
+    else { entryStr[i]= key;
+    	lcd.clear();
+    	lcd.setCursor(1,2);
+    	lcd.print(entryStr[i]);
+         i++;}
+    
+   
+     }
+   else {
+   	i=0;
+   	lcd.clear(); 
+   	lcd.setCursor(1,0); 
+   	lcd.print("Temperatura:");
+   	lcd.print(entryStr);
+   	cookTemp = (int) entryStr;
+   } 
+  
+  }   
+}
