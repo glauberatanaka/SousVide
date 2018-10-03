@@ -66,16 +66,22 @@ void setup(void)
   digitalWrite(relayPin, HIGH);
 
   //seta temperatura de cozimento
+  //lcd clear cursor(0.0) print temperatura
   int digito1 = setCookTemp() - '0';
+  //mostrar digito 1
   int digito2 = setCookTemp() - '0';
+  //mostrar digito 2 depois do digito 1
+  //delay
   int temp = digito1*10 + digito2;
   cookTemp = (float)temp;
-  cookTempBottom = cookTemp + 0.7;
-  cookTempTop = cookTemp - 0.3;
+  cookTempTop = cookTemp + 0.7;
+  cookTempBottom = cookTemp - 0.3;
   Serial.print("cookTemp: ");
   Serial.print(cookTemp);
   Serial.print("\n");
   
+  //inicializando
+  //delay
   
 }
  
