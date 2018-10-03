@@ -33,7 +33,9 @@ OneWire oneWire(tempSensorPin);
 float cookTemp;
 float cookTempTop;
 float cookTempBottom;
-bool isRelayOn; 
+bool isRelayOn;
+char entryStr[2];
+int i=0;
 
 DallasTemperature sensors(&oneWire);
 DeviceAddress sensor1;
@@ -62,6 +64,18 @@ void setup(void)
   // Declara pin do relay
   pinMode(relayPin, OUTPUT);
   digitalWrite(relayPin, HIGH);
+
+  //seta temperatura de cozimento
+  int digito1 = setCookTemp() - '0';
+  int digito2 = setCookTemp() - '0';
+  int temp = digito1*10 + digito2;
+  cookTemp = (float)temp;
+  cookTempBottom = cookTemp + 0.7;
+  cookTempTop = cookTemp - 0.3;
+  Serial.print("cookTemp: ");
+  Serial.print(cookTemp);
+  Serial.print("\n");
+  
   
 }
  
@@ -77,26 +91,10 @@ void mostra_endereco_sensor(DeviceAddress deviceAddress)
  
 void loop()
 {
-  char tecla = teclado.getKey(); // verifica se alguma tecla foi pressionada
-
-  if((teclado.getState() == HOLD) && (tecla == 'A')){
-    Serial.print("Setar Temperatura");
-    // chama função de setCookTemp
-  }
-
+  
   // Le a informacao do sensor
   sensors.requestTemperatures();
   float tempAtual = sensors.getTempC(sensor1);
-
-  Serial.print("Temp C: ");
-  Serial.print(tempAtual);
-  if (isRelayOn){
-    Serial.print(" Relay está Ligado.");
-  }
-  else {
-    Serial.print(" Relay está Desligado.");
-  }
-  Serial.print("\n");
 
   // se temp tiver abaixo do minimo e ebulidor desligado, liga o ebulidor
   if ((tempAtual <= cookTempBottom) && !isRelayOn) 
@@ -110,6 +108,40 @@ void loop()
     digitalWrite(relayPin, HIGH);
     isRelayOn = false;
   }
+
+  // Manda informações para o serial monitor e LCD
+  Serial.print("Temp C: ");
+  Serial.print(tempAtual);
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Temp.:       ");
+  lcd.write(223);
+  lcd.print("C");
+  lcd.setCursor(7,0);
+  lcd.print(tempAtual);
+  lcd.setCursor(0,1);
+  lcd.print("Relay: ");
+  lcd.setCursor(7,1);
+  if (isRelayOn){
+    Serial.print(" Relay está Ligado.");
+  lcd.print("ON");
+  }
+  else {
+    Serial.print(" Relay está Desligado.");
+    lcd.print("OFF");
+  }
+  Serial.print("\n");
    
-  delay(3000);
+  delay(1000);
+}
+
+int setCookTemp()
+{
+  char key = teclado.waitForKey();
+  if (key != NO_KEY){
+    Serial.print(key);
+    Serial.print("\n");
+    return key;
+  } //end if
 }

@@ -43,32 +43,34 @@ void loop()
 {
   char key = keypad.getKey();
 
-if (key){
-  	if (key != '#'){
-    	if(key =='*'){
+  if (key)
+  {
+  	if (key != '#')
+    {
+    	if(key =='*')
+      {
     		lcd.clear();
-      		entryStr[0]= '0';
-      		entryStr[1]= '0';
-      
-      	
+        entryStr[0]= '0';
+        entryStr[1]= '0';	
+      }
+      else 
+      { 
+        entryStr[i]= key;
+        lcd.clear();
+        lcd.setCursor(1,2);
+        lcd.print(entryStr[i]);
+        i++;
+      }
     }
-    
-    else { entryStr[i]= key;
-    	lcd.clear();
-    	lcd.setCursor(1,2);
-    	lcd.print(entryStr[i]);
-         i++;}
-    
-   
-     }
-   else {
-   	i=0;
-   	lcd.clear(); 
-   	lcd.setCursor(1,0); 
-   	lcd.print("Temperatura:");
-   	lcd.print(entryStr);
-   	cookTemp = (int) entryStr;
-   } 
+    else 
+    {
+      i=0;
+      lcd.clear(); 
+      lcd.setCursor(1,0); 
+      lcd.print("Temperatura:");
+      lcd.print(entryStr);
+      cookTemp = (int) entryStr;
+    } 
   
   }   
 }

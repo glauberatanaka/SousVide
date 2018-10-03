@@ -15,7 +15,6 @@ byte pinoscolunas[colunas] = {5,4,3,2}; //pinos utilizados nas colunas
  
 //inicializando o teclado
 Keypad teclado = Keypad( makeKeymap(matrizteclado), pinoslinhas, pinoscolunas, linhas, colunas );
-teclado.setHoldTime(10000);
 
 void setup() {
   Serial.begin(9600);
