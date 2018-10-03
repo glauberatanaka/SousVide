@@ -66,7 +66,7 @@ void setup(void)
   digitalWrite(relayPin, HIGH);
 
   //seta temperatura de cozimento
-  //lcd clear cursor(0.0) print temperatura
+  lcd.clear();
   int digito1 = setCookTemp() - '0';
   //mostrar digito 1
   int digito2 = setCookTemp() - '0';
