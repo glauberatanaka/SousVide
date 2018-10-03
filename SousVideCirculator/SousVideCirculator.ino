@@ -67,21 +67,27 @@ void setup(void)
 
   //seta temperatura de cozimento
   lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Temp Setup");
   int digito1 = setCookTemp() - '0';
-  //mostrar digito 1
+  lcd.setCursor(0,1);
+  lcd.print(digito1);
   int digito2 = setCookTemp() - '0';
-  //mostrar digito 2 depois do digito 1
-  //delay
+  lcd.setCursor(1,1);
+  lcd.print(digito2);
+  lcd.write(223);
+  lcd.print("C");
+  delay(3000);
   int temp = digito1*10 + digito2;
   cookTemp = (float)temp;
   cookTempTop = cookTemp + 0.7;
   cookTempBottom = cookTemp - 0.3;
   Serial.print("cookTemp: ");
   Serial.print(cookTemp);
-  Serial.print("\n");
-  
-  //inicializando
-  //delay
+  Serial.print("\n");  
+
+  lcd.print("Inicializando...")
+  delay(3000);
   
 }
  
