@@ -5,10 +5,10 @@
 #include <Keypad.h>
  
 // Porta do pino de sinal do DS18B20
-const byte tempSensorPin 13
+#define tempSensorPin 13
 
 // Porta do pino de sinal do Relay
-const byte relayPin 11
+#define relayPin 11
  
 // Teclado matricial
 const byte linhas = 4; //4 linhas
@@ -30,10 +30,10 @@ Keypad teclado = Keypad( makeKeymap(matrizteclado), pinoslinhas, pinoscolunas, l
 OneWire oneWire(tempSensorPin);
  
 // Armazena temperatura de cozimento
-float cookTemp = 0;
-float cookTempTop = 0;
-float cookTempBottom = 0;
-bool isRelayOn = false; 
+float cookTemp;
+float cookTempTop;
+float cookTempBottom;
+bool isRelayOn; 
 
 DallasTemperature sensors(&oneWire);
 DeviceAddress sensor1;
@@ -62,7 +62,7 @@ void setup(void)
   // Declara pin do relay
   pinMode(relayPin, OUTPUT);
   digitalWrite(relayPin, HIGH);
-   
+  
 }
  
 void mostra_endereco_sensor(DeviceAddress deviceAddress)
@@ -88,16 +88,26 @@ void loop()
   sensors.requestTemperatures();
   float tempAtual = sensors.getTempC(sensor1);
 
+  Serial.print("Temp C: ");
+  Serial.print(tempAtual);
+  if (isRelayOn){
+    Serial.print(" Relay está Ligado.");
+  }
+  else {
+    Serial.print(" Relay está Desligado.");
+  }
+  Serial.print("\n");
+
   // se temp tiver abaixo do minimo e ebulidor desligado, liga o ebulidor
-  if ((tempAtual < cookTempBottom) && !isRelayOn) 
+  if ((tempAtual <= cookTempBottom) && !isRelayOn) 
   {
     digitalWrite(relayPin, LOW);
     isRelayOn = true;
   }
 
-  if (tempAtual > cookTempTop)
+  if (tempAtual >= cookTempTop)
   {
-    digitalWrite(relayPin, LOW);
+    digitalWrite(relayPin, HIGH);
     isRelayOn = false;
   }
    
