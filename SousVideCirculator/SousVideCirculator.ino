@@ -31,7 +31,10 @@ OneWire oneWire(tempSensorPin);
  
 // Armazena temperatura de cozimento
 float cookTemp = 0;
- 
+float cookTempTop = 0;
+float cookTempBottom = 0;
+bool isRelayOn = false; 
+
 DallasTemperature sensors(&oneWire);
 DeviceAddress sensor1;
  
@@ -54,7 +57,11 @@ void setup(void)
   mostra_endereco_sensor(sensor1);
   Serial.println();
   Serial.println();
+  // Inicia LCD
   lcd.begin(16, 2);
+  // Declara pin do relay
+  pinMode(relayPin, OUTPUT);
+  digitalWrite(relayPin, HIGH);
    
 }
  
@@ -80,11 +87,18 @@ void loop()
   // Le a informacao do sensor
   sensors.requestTemperatures();
   float tempAtual = sensors.getTempC(sensor1);
-  // Atualiza temperaturas minima e maxima
-  if (tempAtual < cookTemp)
+
+  // se temp tiver abaixo do minimo e ebulidor desligado, liga o ebulidor
+  if ((tempAtual < cookTempBottom) && !isRelayOn) 
   {
-    //ligar o relay
-    // while talvez?
+    digitalWrite(relayPin, LOW);
+    isRelayOn = true;
+  }
+
+  if (tempAtual > cookTempTop)
+  {
+    digitalWrite(relayPin, LOW);
+    isRelayOn = false;
   }
    
   delay(3000);
