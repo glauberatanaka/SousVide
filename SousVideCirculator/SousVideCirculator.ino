@@ -86,7 +86,9 @@ void setup(void)
   Serial.print(cookTemp);
   Serial.print("\n");  
 
-  lcd.print("Inicializando...")
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Inicializando...");
   delay(3000);
   
 }
